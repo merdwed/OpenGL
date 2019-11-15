@@ -1,0 +1,38 @@
+﻿  Grapher.cpp
+C:\Users\merdwed\source\repos\Trajectory\Grapher\Grapher.cpp(23,14): warning C4244:  инициализация: преобразование "int" в "float", возможна потеря данных
+C:\Users\merdwed\source\repos\Trajectory\Grapher\Grapher.cpp(328,30): warning C4305:  =: усечение из "double" в "float"
+C:\Users\merdwed\source\repos\Trajectory\Grapher\Grapher.cpp(332,31): warning C4305:  =: усечение из "double" в "float"
+C:\Users\merdwed\source\repos\Trajectory\Grapher\Grapher.cpp(404,22): warning C4305:  =: усечение из "double" в "float"
+C:\Users\merdwed\source\repos\Trajectory\Grapher\Grapher.cpp(407,21): warning C4305:  =: усечение из "double" в "float"
+C:\Users\merdwed\source\repos\Trajectory\Grapher\Grapher.cpp(410,21): warning C4305:  =: усечение из "double" в "float"
+C:\Users\merdwed\source\repos\Trajectory\Grapher\Grapher.cpp(413,22): warning C4305:  =: усечение из "double" в "float"
+  display.cpp
+C:\Users\merdwed\source\repos\Trajectory\Grapher\Grapher.cpp(484,12): warning C4244:  аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(79,32): warning C4305:  аргумент: усечение из "double" в "GLfloat"
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(81,34): warning C4305:  аргумент: усечение из "double" в "GLfloat"
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(84,20): warning C4018:  <: несоответствие типов со знаком и без знака
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(86,33): warning C4305:  аргумент: усечение из "double" в "GLfloat"
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(102,35): warning C4305:  аргумент: усечение из "double" в "GLfloat"
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(111,20): warning C4018:  <: несоответствие типов со знаком и без знака
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(114,34): warning C4305:  аргумент: усечение из "double" в "GLfloat"
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(118,20): warning C4018:  <: несоответствие типов со знаком и без знака
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(129,62): warning C4305:  аргумент: усечение из "double" в "GLfloat"
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(130,63): warning C4305:  аргумент: усечение из "double" в "GLfloat"
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(131,64): warning C4305:  аргумент: усечение из "double" в "GLfloat"
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(132,63): warning C4305:  аргумент: усечение из "double" в "GLfloat"
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(145,15): warning C4244:  аргумент: преобразование "int" в "GLfloat", возможна потеря данных
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(145,38): warning C4244:  аргумент: преобразование "int" в "GLfloat", возможна потеря данных
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(145,68): warning C4244:  аргумент: преобразование "int" в "GLfloat", возможна потеря данных
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(145,90): warning C4244:  аргумент: преобразование "int" в "GLfloat", возможна потеря данных
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(180,29): warning C4244:  +=: преобразование "double" в "float", возможна потеря данных
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(182,30): warning C4244:  -=: преобразование "double" в "float", возможна потеря данных
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(186,29): warning C4244:  +=: преобразование "double" в "float", возможна потеря данных
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(188,30): warning C4244:  -=: преобразование "double" в "float", возможна потеря данных
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(199,31): warning C4244:  =: преобразование "double" в "float", возможна потеря данных
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(200,17): warning C4244:  =: преобразование "double" в "float", возможна потеря данных
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(201,30): warning C4244:  =: преобразование "double" в "float", возможна потеря данных
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(214,31): warning C4305:  аргумент: усечение из "double" в "GLclampf"
+  Создание кода...
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(248,68): warning C4244:  аргумент: преобразование "double" в "GLfloat", возможна потеря данных
+glaux.lib(tk.obj) : error LNK2019: ссылка на неразрешенный внешний символ _vsprintf в функции _PrintMessage
+C:\Users\merdwed\source\repos\Trajectory\Debug\Grapher.exe : fatal error LNK1120: неразрешенных внешних элементов: 1

@@ -1,0 +1,27 @@
+﻿  display.cpp
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(82,32): warning C4305:  аргумент: усечение из "double" в "GLfloat"
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(84,34): warning C4305:  аргумент: усечение из "double" в "GLfloat"
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(89,33): warning C4305:  аргумент: усечение из "double" в "GLfloat"
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(105,35): warning C4305:  аргумент: усечение из "double" в "GLfloat"
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(117,34): warning C4305:  аргумент: усечение из "double" в "GLfloat"
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(132,62): warning C4305:  аргумент: усечение из "double" в "GLfloat"
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(133,63): warning C4305:  аргумент: усечение из "double" в "GLfloat"
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(134,64): warning C4305:  аргумент: усечение из "double" в "GLfloat"
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(135,63): warning C4305:  аргумент: усечение из "double" в "GLfloat"
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(148,15): warning C4244:  аргумент: преобразование "int" в "GLfloat", возможна потеря данных
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(148,38): warning C4244:  аргумент: преобразование "int" в "GLfloat", возможна потеря данных
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(148,68): warning C4244:  аргумент: преобразование "int" в "GLfloat", возможна потеря данных
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(148,90): warning C4244:  аргумент: преобразование "int" в "GLfloat", возможна потеря данных
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(189,29): warning C4244:  +=: преобразование "double" в "float", возможна потеря данных
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(191,30): warning C4244:  -=: преобразование "double" в "float", возможна потеря данных
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(202,31): warning C4244:  =: преобразование "double" в "float", возможна потеря данных
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(203,17): warning C4244:  =: преобразование "double" в "float", возможна потеря данных
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(204,30): warning C4244:  =: преобразование "double" в "float", возможна потеря данных
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(210,31): warning C4305:  аргумент: усечение из "double" в "GLclampf"
+C:\Users\merdwed\source\repos\Trajectory\Grapher\display.cpp(244,68): warning C4244:  аргумент: преобразование "double" в "GLfloat", возможна потеря данных
+  Создание кода
+  15 of 33 functions (45.5%) were compiled, the rest were copied from previous compilation.
+    1 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Создание кода завершено
+  Grapher.vcxproj -> C:\Users\merdwed\source\repos\Trajectory\x64\Release\Grapher.exe

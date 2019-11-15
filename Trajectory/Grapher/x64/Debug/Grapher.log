@@ -1,0 +1,7 @@
+﻿  Grapher.cpp
+C:\Users\merdwed\source\repos\Trajectory\Grapher\Grapher.cpp(71,14): warning C4244:  инициализация: преобразование "int" в "float", возможна потеря данных
+C:\Users\merdwed\source\repos\Trajectory\Grapher\Grapher.cpp(451,30): warning C4244:  =: преобразование "double" в "float", возможна потеря данных
+C:\Users\merdwed\source\repos\Trajectory\Grapher\Grapher.cpp(452,16): warning C4244:  =: преобразование "double" в "float", возможна потеря данных
+C:\Users\merdwed\source\repos\Trajectory\Grapher\Grapher.cpp(453,29): warning C4244:  =: преобразование "double" в "float", возможна потеря данных
+C:\Users\merdwed\source\repos\Trajectory\Grapher\Grapher.cpp(504,12): warning C4244:  аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+  Grapher.vcxproj -> C:\Users\merdwed\source\repos\Trajectory\x64\Debug\Grapher.exe
