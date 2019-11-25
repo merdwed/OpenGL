@@ -1,7 +1,13 @@
 ﻿  Grapher.cpp
-C:\Users\merdwed\source\repos\Trajectory\Grapher\Grapher.cpp(71,14): warning C4244:  инициализация: преобразование "int" в "float", возможна потеря данных
-C:\Users\merdwed\source\repos\Trajectory\Grapher\Grapher.cpp(451,30): warning C4244:  =: преобразование "double" в "float", возможна потеря данных
-C:\Users\merdwed\source\repos\Trajectory\Grapher\Grapher.cpp(452,16): warning C4244:  =: преобразование "double" в "float", возможна потеря данных
-C:\Users\merdwed\source\repos\Trajectory\Grapher\Grapher.cpp(453,29): warning C4244:  =: преобразование "double" в "float", возможна потеря данных
-C:\Users\merdwed\source\repos\Trajectory\Grapher\Grapher.cpp(504,12): warning C4244:  аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+C:\Users\merdwed\source\repos\Trajectory\Grapher\Grapher.cpp(70,14): warning C4244:  инициализация: преобразование "int" в "float", возможна потеря данных
+C:\Users\merdwed\source\repos\Trajectory\Grapher\Grapher.cpp(120,30): warning C4267:  инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\merdwed\source\repos\Trajectory\Grapher\Grapher.cpp(156,23): warning C4102:  exit_parse_YAML_point: неиспользованная метка
+C:\Users\merdwed\source\repos\Trajectory\Grapher\Grapher.cpp(93,7): warning C4101:  buftmp: неиспользованная локальная переменная
+C:\Users\merdwed\source\repos\Trajectory\Grapher\Grapher.cpp(210,37): warning C4244:  =: преобразование "__int64" в "int", возможна потеря данных
+C:\Users\merdwed\source\repos\Trajectory\Grapher\Grapher.cpp(233,28): warning C4244:  аргумент: преобразование "__int64" в "int", возможна потеря данных
+C:\Users\merdwed\source\repos\Trajectory\Grapher\Grapher.cpp(241,24): warning C4244:  =: преобразование "__int64" в "int", возможна потеря данных
+C:\Users\merdwed\source\repos\Trajectory\Grapher\Grapher.cpp(653,30): warning C4244:  =: преобразование "double" в "float", возможна потеря данных
+C:\Users\merdwed\source\repos\Trajectory\Grapher\Grapher.cpp(654,16): warning C4244:  =: преобразование "double" в "float", возможна потеря данных
+C:\Users\merdwed\source\repos\Trajectory\Grapher\Grapher.cpp(655,29): warning C4244:  =: преобразование "double" в "float", возможна потеря данных
+C:\Users\merdwed\source\repos\Trajectory\Grapher\Grapher.cpp(714,12): warning C4244:  аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
   Grapher.vcxproj -> C:\Users\merdwed\source\repos\Trajectory\x64\Debug\Grapher.exe

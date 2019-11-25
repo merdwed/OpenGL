@@ -4,24 +4,24 @@
 
 GLuint texture[3];//массив для хранения текстурок
 				  //94.95 метра 
-const coord deltaCam = { 0.025,0.025,0.025 }, deltaMove = { 0.4,0.1,0.1 };
+const xyz_structure deltaCam = { 0.025,0.025,0.025 }, deltaMove = { 0.4,0.1,0.1 };
 bool keychar[256];
 bool keyint[256];
-coord track[1000000];
-int Time_MGA[1000000];
+trajectory track[16];
+int number_of_track = 0;
 float mapAngleNorth = 0;
 float mapAngle = 0;
 //float deltaAngleMap = 0;
 float verticalAngleNorth = 0;
 float horizontalAngleNorth = 0;
-coord color_track = { 0,1,0 };
+xyz_structure color_track = { 0,1,0 };
 int delta_i = 0;
-coord cam = { 0,1,5 }, direct = { 0,0,-1 }, angleCam = { 0,0,0 }, angle_rate = { 0,0,0 };
-bool real_time = true;
-bool show_line = true;
+xyz_structure cam = { 0,1,5 }, direct = { 0,0,-1 }, angleCam = { 0,0,0 }, angle_rate = { 0,0,0 };
+//bool real_time = true;
+//bool show_line = true;
 bool draw_map_var = true;
-int current_i = 0;
-int global_i = 0;
+//int current_i = 0;
+//int global_i = 0;
 
 
 GLvoid LoadGLTextures()
@@ -85,11 +85,11 @@ void draw_symbols()
 	glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, '+');
 	glRasterPos3f(0.015, -0.02, -0.1);
 	char str_for_character[50];
-	sprintf(str_for_character, "%0.3f", (float)Time_MGA[current_i] / 1000.0);
+	sprintf(str_for_character, "%0.3f", (float)track[0].points[track[0].index].t / 1000.0);
 	for (int i = 0; i < strlen(str_for_character); i++)
 		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, str_for_character[i]);
 	glRasterPos3f(0.02, -0.02, -0.1);
-	if (real_time)
+	/*if (real_time)
 	{
 		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, 'R');
 		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, 'e');
@@ -102,8 +102,8 @@ void draw_symbols()
 		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, 'e');
 
 
-	}
-	sprintf(str_for_character, "%f", track[current_i - 1].y);
+	}*/
+	sprintf(str_for_character, "%f", track[0].points[track[0].index].coord.y);
 	glRasterPos3f(-0.024, -0.02, -0.1);
 	glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, 'H');
 	glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, 'e');
@@ -131,10 +131,18 @@ void draw_map() {
 	glColor3f(1, 1, 1);
 	glBindTexture(GL_TEXTURE_2D, texture[0]);
 	glBegin(GL_QUADS);
-	glTexCoord2f(1, 0); glVertex3f(27.929 - 0.5, 0, 24.929 - 0.5); //право низ 
-	glTexCoord2f(0, 0); glVertex3f(-23.929 - 0.5, 0, 24.929 - 0.5);//лево  Низ
-	glTexCoord2f(0, 1); glVertex3f(-23.929 - 0.5, 0, -26.929 - 0.5); //лево Верх 
-	glTexCoord2f(1, 1); glVertex3f(27.929 - 0.5, 0, -26.929 - 0.5);  //право Верх 
+	glTexCoord2f(1,0);
+	//glTexxyz_structure2f(1, 0); 
+	glVertex3f(27.929 - 0.5, 0, 24.929 - 0.5); //право низ 
+	glTexCoord2f(0, 0);
+	//glTexxyz_structure2f(0, 0); 
+	glVertex3f(-23.929 - 0.5, 0, 24.929 - 0.5);//лево  Низ
+	glTexCoord2f(0, 1);
+	//glTexxyz_structure2f(0, 1); 
+	glVertex3f(-23.929 - 0.5, 0, -26.929 - 0.5); //лево Верх 
+	glTexCoord2f(1, 1);
+	//glTexxyz_structure2f(1, 1); 
+	glVertex3f(27.929 - 0.5, 0, -26.929 - 0.5);  //право Верх 
 	glEnd();
 	glBindTexture(GL_TEXTURE_2D, texture[1]);
 	glPopMatrix();
@@ -165,7 +173,7 @@ void draw_lines()
 }
 void calculateScene()
 {
-	if (!real_time)
+	/*if (!real_time)
 	{
 		current_i += delta_i;
 		if (current_i < 0)current_i = 0;
@@ -179,7 +187,7 @@ void calculateScene()
 		//angle[current_i].z = angle[current_i - 1].z + gyro[current_i].z*(float)(Time_MGA[current_i] - Time_MGA[current_i - 1]) / 1000.0 + (gyro[current_i].z - gyro[current_i - 1].z)*(float)(Time_MGA[current_i] - Time_MGA[current_i - 1]) / 2000.0;
 	}
 	else
-		current_i = global_i;
+		current_i = global_i;*/
 	/*if (deltaMove.z)
 	{
 		cam.z += deltaMove.z * 0.1;
@@ -225,8 +233,8 @@ void Display(void) {
 
 
 	glLineWidth(1);
-	if (show_line)
-		draw_lines();
+	//if (show_line)
+	//	draw_lines();
 	if (draw_map_var)
 		draw_map();
 
@@ -237,14 +245,17 @@ void Display(void) {
 	glColor3f(1, 0, 0);
 
 	glLineWidth(2);
-	for (int i = 1; i < current_i; i++)
+	for (int h = 0; h < TRACK_MAX; h++)
 	{
-		glColor3f(color_track.x, color_track.y, color_track.z);
-		glVertex3f(track[i].x / 10, /*htv[i].x / 10*/track[i].y / 10, track[i].z / 10);
-		glColor3f(0, 0, 0);
-		glVertex3f(track[i].x / 10, /*htv[i].x / 10+0.1*/track[i].y / 10 + 0.01, track[i].z / 10);
+		if(track[h].active)
+		for (int i = 1; i < track[h].index; i++)
+		{
+			glColor3f(color_track.x, color_track.y, color_track.z);
+			glVertex3f(track[h].points[i].coord.x / 10, /*htv[i].x / 10*/track[h].points[i].coord.y / 10, track[h].points[i].coord.z / 10);
+			glColor3f(0, 0, 0);
+			glVertex3f(track[h].points[i].coord.x / 10, /*htv[i].x / 10+0.1*/track[h].points[i].coord.y / 10 + 0.01, track[h].points[i].coord.z / 10);
+		}
 	}
-
 	glEnd();
 
 	//glBegin(GL_POINTS);
@@ -318,7 +329,7 @@ void Display(void) {
 		glRotatef(-angle[current_i - 1].y, 0, 0, 1);
 		glColor3f(0.5, 0.5, 0.5);
 		glBegin(GL_LINES);
-		coord angle_r={0,0,0};
+		xyz_structure angle_r={0,0,0};
 		//angle_r.x=angle.x/360*2*3.1415;
 		//angle_r.y=angle.y/360*2*3.1415;
 		//angle_r.z=angle.z/360*2*3.1415;

@@ -2,7 +2,6 @@
 
 
 #include "display.h"
-
 //#pragma comment(lib,"legacy_stdio_definitions.lib")
 
 //float angle = 0.0;// угол поворота камеры
@@ -79,32 +78,251 @@ void Reshape(int w, int h) {
 	// установить параметры вьюпорта
 
 	// установить корректную перспективу
-	gluPerspective(45, 1, 0.1, 100);
+	gluPerspective(45, 1, 0.1, 100); 
 	// вернуться к матрице проекции
 	glMatrixMode(GL_MODELVIEW);
 }
-void ReadData(char* pParam)
+point_structure parse_YAML_point(char * str)
 {
+	point_structure point;
+	point.a = { 0,0,0 };
+	point.coord = { 0,0,0 };
+	point.vec = { 0,0,0 };
+	point.t = 0;
+	memset(point.str, 0, sizeof(char)* EXTRA_LINE_LENGTH);
+	char buftmp[32];
+	char* pointer[5];
+	char* sptr = 0;
+	pointer[0] = strstr(str, "str:");
+	if (pointer[0])//сначала обрабатываем str, ибо в ней может содержаться все чо угодно
+	{
+		sptr = strchr(pointer[0], '\"');
+		if (sptr == 0 || strchr(sptr + 1, '\"') == 0)
+		{
+			strcpy(point.str, "#!error: there isn't \" symbols after str mark");
+			return point;
+		}
+		strncpy(point.str, sptr + 1, strchr(sptr + 1, '\"')-(sptr + 1));
+		for (int i = 1; sptr[i] != '\"'; i++)
+			sptr[i] = ' ';
+	}
+	pointer[1] = strstr(str, "a:");
+	pointer[2] = strstr(str, "vec:");
+	pointer[3] = strstr(str, "coord:");
+	pointer[4] = strstr(str, "t:");
+	if (pointer[1]) { pointer[1][-1] = 0; pointer[1] += 2; }
+	if (pointer[2]) { pointer[2][-1] = 0; pointer[2] += 4; }
+	if (pointer[3]) { pointer[3][-1] = 0; pointer[3] += 6; }
+	if (pointer[4]) { pointer[4][-1] = 0; pointer[4] += 2; }
+	for(int h=1;h<4;h++)
+		if (pointer[h])	//обработка маркеров a: vec: coord:
+		{
+			int n = strlen(pointer[h]);
+			xyz_structure* xyzptr = 0;
+			switch (h)
+			{
+			case 1: xyzptr = &point.a; break;
+			case 2: xyzptr = &point.vec; break;
+			case 3: xyzptr = &point.coord; break;
+			}
+			for (int i = 0; i < n; i++)
+			{
+				while (i < n && ((pointer[h][i] != 'x' && pointer[h][i] != 'y' && pointer[h][i] != 'z') || pointer[h][i + 1] != ':'))
+					i++;
+				sptr = pointer[h] + i + 2;
+				if (i >= n)break;
+				float* fptr = 0;
+				switch (pointer[h][i])
+				{
+				case 'x':fptr = &xyzptr->x; break;
+				case 'y':fptr = &xyzptr->y; break;
+				case 'z':fptr = &xyzptr->z; break;
+				}
+				while (i < n && pointer[h][i] != ',' && pointer[h][i] != '}' && pointer[h][i] != '\n')
+					i++;
+				pointer[h][i] = 0;
+				sscanf(sptr, "%f", fptr);
+			}
+		}
+	if (pointer[4])	// обработка маркера t:
+	{
+		int i = 0;
+		while (pointer[4][i]!=0 && pointer[4][i] != ',' && pointer[4][i] != '}' && pointer[4][i] != '\n')
+			i++;
+		pointer[4][i] = 0;
+		sscanf(pointer[4], "%f", &point.t);
+	}
+	return point;
+	exit_parse_YAML_point:
+	strcpy(point.str, "#!error: bad point");
+	return { {0,0,0}, {0,0,0}, {0,0,0}, -1, "error: bad point" };
+}
+
+/*int read_and_parse_trajectory(char* b, const int as, int* asc)
+{
+	
+}*/
+int ReadData(char* pParam)	// считывание данных из файла, возвращает не ноль если успешно
+{							// формат данных - YAML
 	FILE* fdata = fopen(pParam, "r");
+	int exit_code = 0;
 	if (fdata == 0)
 	{
 		printf("\nERROR, can't open file");
-		return;
+		return 0;
 	}
-	char* buf = new char[100];
 
+
+	const int arr_size = 2048;//для выделения памяти
+	//int arr_size_count = 1;
+
+	
+	char* buf = (char*)malloc((arr_size + 1) * sizeof(char));	//
+	memset(buf, 0, (arr_size + 1) * sizeof(char));
+
+	int string_counter = 0;     //чтобы выводить на какой строчке ошибка
+	int space_counter = 0;		//для правильной табуляции
+	int local_space_counter = 0;
+	int tmp = 0;	// просто промежуточные вычисления
+	fgets(buf, arr_size, fdata);
+	string_counter++;
+	for (local_space_counter = 0;
+		(buf[local_space_counter] == ' ' || buf[local_space_counter] == '\t') && buf[local_space_counter] != EOF && buf[local_space_counter] != 0;
+		local_space_counter++);
 	while (!feof(fdata))
 	{
-		for (int i = 0; i < 100; i++)
+		space_counter = local_space_counter;
+		while ((strchr(buf, ':') == 0 || buf[space_counter] == 0) && buf[space_counter] != EOF)		// поиск ключа траектории и подсчет пробелов
 		{
-			buf[i] = fgetc(fdata);
-			if (buf[i] == EOF || buf[i] == '\n')break;
+			fgets(buf, arr_size, fdata);
+			string_counter++;
+			for (space_counter = 0;
+				(buf[space_counter] == ' ' || buf[space_counter] == '\t') && buf[space_counter] != EOF && buf[space_counter] != 0;
+				space_counter++);
+		} 
+		
+
+
+		if (buf[space_counter] == EOF)break;	// файл заканчивается пустой строкой либо строкой с пробелами
+		if (buf[space_counter] == 0)continue;   //строка с пробелами
+
+		
+		for (tmp = strchr(buf, ':') - buf - 1; tmp >= 0 && (buf[tmp] == ' ' || buf[tmp] == '\t'); tmp--);
+		if (tmp >= 0)
+			if ((tmp - space_counter + 1) < 64) 
+			{
+				strncpy(track[number_of_track].name, buf + space_counter, tmp - space_counter + 1);
+				track[number_of_track].name[tmp - space_counter + 1] = 0;
+			}
+			else 
+			{
+				strncpy(track[number_of_track].name, buf + space_counter, 63);
+				track[number_of_track].name[63] = 0;
+			}
+		memset(buf, 0, sizeof(char) * strlen(buf));
+
+
+		char* pointer = buf; //для перемещения по буферу
+		do {//считывания всего блока данных, определяя границу по табуляции
+			pointer = pointer + strlen(pointer);
+			if ((pointer - buf) >= arr_size)
+			{
+				printf("error, so much character\n");
+				return 0;
+			}
+			fgets(pointer, arr_size - (pointer - buf), fdata);
+			string_counter++;
+			for (local_space_counter = 0;
+				(pointer[local_space_counter] == ' ' || pointer[local_space_counter] == '\t') && pointer[local_space_counter] != EOF && pointer[local_space_counter] != 0;
+				local_space_counter++);
+
+			if (pointer[local_space_counter] == EOF)               break;	// файл заканчивается пустой строкой либо строкой с пробелами
+			if (pointer[local_space_counter] == 0 && !feof(fdata)) continue;   //строка с пробелами
+			tmp = pointer - buf + local_space_counter;
+			if (pointer[local_space_counter] == '-' || local_space_counter <= space_counter || feof(fdata))
+			{
+				if (buf[tmp] == '-' && (strchr(buf, '-') == pointer + local_space_counter))
+						continue;						//первое считывание
+				else
+					if (pointer == buf)
+						break;						//первое считывание
+					
+				while (buf[tmp] != '\n')
+					tmp--;
+				if (track[number_of_track].number == track[number_of_track].size_of_array)//  растягиваемое выделение памяти
+				{
+					track[number_of_track].size_of_array += JUMP_FOR_DYNAMIC_ARRAY_OF_POINTS;
+					track[number_of_track].points = (point_structure*)realloc(track[number_of_track].points, sizeof(point_structure) * track[number_of_track].size_of_array);
+				}
+
+				buf[tmp] = 0;			// подготовка к парсингу точки
+				strchr(buf, '-')[0] = ' ';
+				track[number_of_track].points[track[number_of_track].number] = parse_YAML_point(buf);
+
+				if (track[number_of_track].points[track[number_of_track].number].str[0] == '#' && track[number_of_track].points[track[number_of_track].number].str[1] == '!')
+					printf("%s . Before %d string\n", track[number_of_track].points[track[number_of_track].number].str, string_counter);
+				else
+					track[number_of_track].number++;
+				
+				//for (int i = 0; buf[tmp + i] != 0; i++)
+				//	buf[i] = buf[tmp + i];
+				tmp++;
+				strcpy(buf, buf + tmp);
+				pointer = buf;
+			}
+		
+
+			
+		} while (!feof(fdata) && local_space_counter > space_counter  && pointer[local_space_counter] != EOF);
+		if (track[number_of_track].number > 0)
+		{
+			track[number_of_track].active = true;
+			track[number_of_track].index = track[number_of_track].number;
+			number_of_track++;
+			
 		}
-		sscanf(buf, "%f%f%f%d", &track[current_i].x, &track[current_i].y, &track[current_i].z, &Time_MGA[current_i]);
-		current_i++;
+			//pointer[-1] = 0;
+
+
+
+		//exit_code = read_and_parse_trajectory(buf, arr_size, &arr_size_count);
+
+
+		
+		
+
+
+
+		/*while (!feof(fdata))
+		{
+			pointer = buf;
+			fgets(buf, 255, fdata);
+
+			for (int i = 0; i < 255 && buf[i] != EOF && buf[i] != '\n' && buf[i] != 0; i += 2)//цикл обработки каждой строки
+			{
+				while (buf[i] != ':' && buf[i] != EOF && buf[i] != '\n' && buf[i] != 0 && i < 255)
+					i++;
+				buf[i] = 0;
+				switch (pointer[0])//парсинг по ключам
+				{
+				case 'x':sscanf(pointer + 2, "%f", &track[current_i].x); break;
+				case 'y':sscanf(pointer + 2, "%f", &track[current_i].y); break;
+				case 'z':sscanf(pointer + 2, "%f", &track[current_i].z); break;
+				case 't':sscanf(pointer + 2, "%d", &Time_MGA[current_i]); break;
+				case 'a':break;
+				default:printf("bad file format\n");
+				}
+				if (buf[i + 1] == 0 || buf[i + 1] == EOF)
+					break;
+				buf[i] = ':';
+				pointer = &buf[i] - 1;
+			}
+			current_i++;
+		}*/
 	}
-	delete[] buf;
-	global_i = current_i;
+	free(buf);
+	//global_i = current_i;
+	return exit_code;
 }
 /*HANDLE initCOM(char c[64])
 {
@@ -373,16 +591,7 @@ void keyboard_char(unsigned char key, int x, int y)
 	keychar[key] = true;
 	switch (key) {
 	
-
-	
-	
-	/*case '1':delta_i = -100; real_time = false; break;
-	case '2':delta_i = -10; real_time = false; break;
-	case '3':delta_i = -1; real_time = false; break;
-	case '4':delta_i = 1; real_time = false; break;
-	case '5':delta_i = 10; real_time = false; break;
-	case '6':delta_i = 100; real_time = false; break;*/
-	case '0':current_i = 2; real_time = false; break;
+	//case '0':current_i = 2; real_time = false; break;
 	case 'm':
 	case 'M':draw_map_var = !draw_map_var; break;
 	case 'r':
@@ -391,8 +600,8 @@ void keyboard_char(unsigned char key, int x, int y)
 	case 'G':color_track.x = 0; color_track.y = 1; color_track.z = 0; break;
 	case 'b':
 	case 'B':color_track.x = 0; color_track.y = 0; color_track.z = 1; break;
-	case 'o':
-	case 'O': show_line = !show_line;
+	//case 'o':
+	//case 'O': show_line = !show_line;
 		//case 27:if(polniy_ikran){glutReshapeWindow(1200, 1000);polniy_ikran=false;}else{ glutFullScreen();polniy_ikran=true;} break;
 		//case ' ':prig = true; break;
 		//case 168:
@@ -403,15 +612,7 @@ void keyboard_char(unsigned char key, int x, int y)
 void keyboard_char_up(unsigned char key, int x, int y) 
 {
 	keychar[key] = false;
-	/*switch (key) {
-
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':delta_i = 0; break;
-	}*/
+	
 }
 void keyboard_int(int key, int xx, int yy) 
 {
@@ -421,10 +622,11 @@ void keyboard_int_up(int key, int x, int y)
 {
 	keyint[key] = false;
 }
+
 void keyboardParse() //обработка всех кнопок управления с клавиатуры
 {
 	//переметка траектории, отслеживание 
-	if (keychar['1'] || keychar['2'] || keychar['3'])real_time = false;;
+	//if (keychar['1'] || keychar['2'] || keychar['3'])real_time = false;
 	delta_i = (keychar['1']*(-100)+ keychar['2'] * (-10) + keychar['3'] * (-1) + keychar['4'] * (1) + keychar['5'] * (10) + keychar['6'] * (100));
 	//вращение карты вокруг центра
 	if (keychar[244] || keychar[212] || keychar['A'] || keychar['a']) mapAngle += deltaMove.x;
@@ -457,16 +659,24 @@ void timef(int value) {
 	keyboardParse();
 	glutPostRedisplay();  // перерисовывает окно
 
-	glutTimerFunc(40, timef, 0); // рекурсия
+	glutTimerFunc(40, timef, 0); // рекурсия(нет)
 }
 void mause(int button, int state, int x, int y) {
 	printf("%d %d %d %d\n", button, state, x, y);
 }
 int main(int argc, char** argv) {
-	//setlocale(LC_ALL,"rus");
+	//setlocal(LC_ALL,"rus");
 	float k = 50;
 	FILE* fp;
-
+	for (int i = 0; i < TRACK_MAX; i++)
+	{
+		track[i].number = 0;
+		track[i].size_of_array = 0;
+		track[i].index = 0;
+		track[i].show = 0;
+		track[i].active = 0;
+		track[i].color = { 0.5, 0.5, 0.5 };
+	}
 	fp = fopen("angleNorth.txt", "r");
 	if (fp != 0)
 	{
@@ -498,7 +708,7 @@ int main(int argc, char** argv) {
 	glutKeyboardUpFunc(keyboard_char_up);//для обработки отжатий символов (w,a,s,d)
 										 //glutIgnoreKeyRepeat(0);// что это блин?
 	glutMouseFunc(mause);
-
+	
 
 	glEnable(GL_DEPTH_TEST);// OpenGL - инициализация функции теста
 	srand(time(0));
